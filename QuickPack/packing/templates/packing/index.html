@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QuickPack</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#EDF0F3;--panel:#fff;--ink:#14213D;--muted:#5B6679;--line:#D5DBE3;--tape:#FFC83D;--kraft:#C79A62;--kraft2:#A67A45;--ok:#1F7A4D;--bad:#B3342B;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1626;--panel:#172036;--ink:#EDF0F5;--muted:#9AA6BA;--line:#2A3550;--kraft:#8C6A40;--kraft2:#6E5230;--ok:#5CCB93;--bad:#FF8A80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1626;--panel:#172036;--ink:#EDF0F5;--muted:#9AA6BA;--line:#2A3550;--kraft:#8C6A40;--kraft2:#6E5230;--ok:#5CCB93;--bad:#FF8A80;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Archivo,"Helvetica Neue",Arial,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 48px}
+h1{font-weight:800;font-size:clamp(28px,5vw,44px);line-height:1.05;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0 0 22px;max-width:56ch}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px}
+@media(max-width:820px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+h2{font-size:17px;margin:0 0 12px;font-weight:600}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+button{font:inherit;cursor:pointer}
+.chip{border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:99px;font-size:14px}
+.chip:hover{border-color:var(--ink)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--tape);outline-offset:2px}
+.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.row .n{flex:1;min-width:0}.row b{font-weight:600}.row small{display:block;color:var(--muted);font-size:13px}
+.tag{font-size:12px;border:1px solid var(--bad);color:var(--bad);border-radius:4px;padding:0 5px;margin-left:6px}
+.step{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.step button{width:34px;height:34px;border:0;background:transparent;color:var(--ink);font-size:18px}
+.step button:hover{background:var(--line)}.step span{min-width:28px;text-align:center;font-weight:600}
+.opt{display:flex;gap:8px;align-items:center;margin-top:14px;color:var(--muted);font-size:14px}
+.verdict{background:var(--tape);color:#14213D;border-radius:8px;padding:14px 16px;font-weight:800;font-size:22px;line-height:1.15}
+.verdict small{display:block;font-weight:400;font-size:14px;margin-top:4px}
+.verdict.bad{background:var(--bad);color:#fff}
+.cards{display:grid;gap:12px;margin:14px 0}
+.bx{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:12px}
+.bx svg{flex:none;width:96px;height:auto}.bx h3{margin:0;font-size:18px}
+.bx p{margin:2px 0;color:var(--muted);font-size:14px}
+.stats{display:flex;gap:18px;flex-wrap:wrap;margin:6px 0 14px}
+.stats div{font-size:13px;color:var(--muted)}.stats b{display:block;font-size:20px;color:var(--ink)}
+.why{margin:0;padding:0;list-style:none;font-size:14px}
+.why li{padding:6px 0;border-top:1px solid var(--line);color:var(--muted)}.why b{color:var(--bad);font-weight:600}
+.empty{color:var(--muted);padding:30px 0;text-align:center}
+.note{margin-top:22px;font-size:13px;color:var(--muted)}
+
+.brand{font-weight:800;font-size:16px;color:var(--muted);margin-bottom:8px}.tabs{display:flex;gap:8px;margin-bottom:16px}.tabs button{border:1px solid var(--line);background:transparent;color:var(--ink);padding:9px 16px;border-radius:8px;font-weight:600}
+.tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fld{display:block;font-size:14px;color:var(--muted);margin-bottom:10px}.fld input{display:block;margin-top:4px;width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--ink)}
+.go{margin-top:14px;background:var(--tape);color:#14213D;border:0;border-radius:8px;padding:10px 18px;font-weight:800}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.muted{color:var(--muted)}
+.ord{border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:12px}.ord p{margin:4px 0}.oh{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.st{font-size:12px;border:1px solid var(--line);border-radius:99px;padding:1px 9px;margin-right:4px;color:var(--muted)}.st.on{background:var(--tape);border-color:var(--tape);color:#14213D;font-weight:600}
+.badge{font-size:12px;border-radius:99px;padding:2px 10px;font-weight:600;border:1px solid var(--line)}.badge.placed{background:var(--tape);color:#14213D;border-color:var(--tape)}.badge.packed{color:var(--ok);border-color:var(--ok)}
+.boxes{margin:10px 0;padding-left:18px;font-size:14px}.bs{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line)}.bs small{display:block;color:var(--muted);font-size:12px}
+h3{font-size:15px;margin:14px 0 4px}details{font-size:14px;margin-bottom:6px}summary{cursor:pointer;color:var(--muted)}
+.mini{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:6px;padding:3px 9px;margin:6px 6px 0 0}.mini:hover{border-color:var(--ink)}
+.ln{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:2px 0}.frm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.frm input,.srch{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--ink);width:100%}.srch{margin-bottom:6px}
+.banner{background:var(--tape);color:#14213D;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:14px}.banner .mini{border-color:#14213D;color:#14213D}
+button:disabled{opacity:.35;cursor:not-allowed}s{color:var(--muted)}.badge.cancelled{color:var(--bad);border-color:var(--bad)}
+
+:root{--warn:#B35A00}@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--warn:#FFB454}}:root[data-theme="dark"]{--warn:#FFB454}
+.pill{display:inline-block;font-size:12px;font-weight:600;border-radius:99px;padding:2px 10px;border:1px solid currentColor;white-space:nowrap}
+.pill::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:currentColor;margin-right:6px}
+.pill.avail{color:var(--ok)}.pill.temp{color:var(--warn)}.pill.na{color:var(--bad)}.pill.pend{color:var(--muted)}
+.warn{color:var(--warn)}.rq{border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:12px}
+.rq .frm{margin:8px 0}.rq .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.rq .acts button{margin:0}
+.okb{background:var(--ok);color:#fff;border:0;border-radius:8px;padding:8px 14px;font-weight:600}
+.wb{background:transparent;color:var(--warn);border:1px solid var(--warn);border-radius:8px;padding:8px 14px;font-weight:600}
+.rb{background:transparent;color:var(--bad);border:1px solid var(--bad);border-radius:8px;padding:8px 14px;font-weight:600}
+details.req{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}details.req summary{color:var(--ink);font-weight:600}
+.qin{width:54px;height:34px;text-align:center;font:inherit;font-weight:600;border:0;border-left:1px solid var(--line);border-right:1px solid var(--line);border-radius:0;background:transparent;color:var(--ink);-moz-appearance:textfield;appearance:textfield}
+.qin::-webkit-outer-spin-button,.qin::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.pk{display:flex;align-items:center;gap:10px}
+</style></head><body><div class="wrap">
+<div class="brand">QuickPack</div>
+<h1>Every order deserves the right box.</h1>
+<p class="sub">Order as a customer, then pack it as the warehouse.</p>
+<div class="tabs" role="tablist"><button data-tab="shop" id="t-shop">Customer app</button><button data-tab="warehouse" id="t-warehouse">Warehouse screen</button></div>
+<div id="v-shop" class="grid">
+ <section class="panel"><h2>Order something</h2>
+  <label class="fld">Your name <input id="cname" value="Aarav" maxlength="40"></label>
+  <div id="banner"></div>
+  <input id="search" type="search" placeholder="Search items" aria-label="Search items" class="srch">
+  <div id="shop"></div>
+  <p id="cart" class="muted"></p>
+  <button class="go" id="place">Place order</button><p id="placed" class="ok" aria-live="polite"></p>
+  <details class="req"><summary>Can’t find an item? Request it</summary>
+   <p class="muted">The warehouse will check whether it can supply it. You will see the answer under “My item requests”.</p>
+   <div class="frm"><input id="rq-name" placeholder="Item name" aria-label="Item name" maxlength="80"><input id="rq-qty" type="number" min="1" value="1" aria-label="Quantity"></div>
+   <input id="rq-note" class="srch" style="margin-top:8px" placeholder="Anything the warehouse should know (optional)" aria-label="Note" maxlength="150">
+   <button class="go" id="rq-send">Send request</button><p id="rq-msg" class="ok" aria-live="polite"></p></details></section>
+ <section class="panel"><h2>My orders</h2><div id="myorders"></div><h2 style="margin-top:22px">My item requests</h2><div id="myreqs"></div></section>
+</div>
+<div id="v-warehouse" hidden>
+ <section class="panel"><h2>New product requests <span id="reqcount" class="muted"></span></h2><div id="reqs"></div></section>
+ <section class="panel" style="margin-top:18px"><h2>Orders to pack</h2><div id="queue"></div></section>
+ <section class="panel" style="margin-top:18px"><h2>Inventory</h2>
+  <div id="invlist"></div>
+  <h3>Add a new product</h3>
+  <div class="frm"><input id="np-name" placeholder="Product name" aria-label="Product name"><input id="np-stock" type="number" min="0" placeholder="Stock" aria-label="Stock">
+   <input id="np-l" type="number" min="0" step="any" placeholder="Length (cm)" aria-label="Length"><input id="np-w" type="number" min="0" step="any" placeholder="Width (cm)" aria-label="Width">
+   <input id="np-h" type="number" min="0" step="any" placeholder="Height (cm)" aria-label="Height"><input id="np-kg" type="number" min="0" step="any" placeholder="Weight (kg)" aria-label="Weight"></div>
+  <label class="opt"><input type="checkbox" id="np-fr"> Fragile</label>
+  <button class="go" id="addp">Add product</button><p id="addmsg" class="ok" aria-live="polite"></p></section>
+</div>
+<p class="note">Orders, stock and the packer’s box choice are saved in the database. This page refreshes every few seconds.</p></div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=d=>d.map(x=>+x.toFixed(1)).join(" × ");
+let REQS=[],MYREQS=[],RF={},RMSG={},PRODS=[],BOXL=[],qty={},ORDERS=[],MINE=[],REC={},CHOICE={},MSG={},ADDING=null,tab="shop";
+async function api(method,path,body){const o={method,headers:{"Content-Type":"application/json"}};if(body)o.body=JSON.stringify(body);
+ const r=await fetch(path,o);let d={};try{d=await r.json()}catch(e){}return{status:r.status,data:d};}
+const LABEL={placed:"Waiting for warehouse",accepted:"Being packed",packed:"Packed",cancelled:"Cancelled"};
+const ST=["placed","accepted","packed"];
+const steps=s=>ST.map((k,i)=>`<span class="st ${i<=ST.indexOf(s)?"on":""}">${["Placed","Accepted","Packed"][i]}</span>`).join("");
+const bdims=b=>`${fmt([b.length,b.width,b.height])} cm, up to ${b.max_weight} kg`;
+const line=i=>i.unavailable?`<s>${i.quantity} × ${esc(i.name)}</s> <span class="tag">not available</span>`:`${i.quantity} × ${esc(i.name)}${i.fragile?' <span class="tag">fragile</span>':''}`;
+function drawShop(){const f=($("search").value||"").toLowerCase();
+ $("shop").innerHTML=PRODS.filter(p=>p.name.toLowerCase().includes(f)).map(p=>{const out=p.stock===0;
+ const st=out?'<span class="tag">Out of stock</span>':'';const sm=out?"":(p.stock<=5?`only ${p.stock} left · `:"");
+ return `<div class="row"><div class="n"><b>${esc(p.name)}</b>${p.fragile?'<span class="tag">fragile</span>':''}${st}<small>${sm}${p.weight} kg</small></div>
+ <div class="step"><button aria-label="Remove one ${esc(p.name)}" data-sd="-1" data-id="${p.id}" ${qty[p.id]?"":"disabled"}>−</button><input class="qin" type="number" inputmode="numeric" min="0" max="${p.stock}" data-qi="${p.id}" value="${qty[p.id]}" aria-label="Quantity of ${esc(p.name)}" ${p.stock?"":"disabled"}><button aria-label="Add one ${esc(p.name)}" data-sd="1" data-id="${p.id}" ${qty[p.id]>=p.stock?"disabled":""}>+</button></div></div>`}).join("")||'<div class="empty">No items match.</div>';
+ const n=PRODS.reduce((s,p)=>s+qty[p.id],0),w=PRODS.reduce((s,p)=>s+qty[p.id]*p.weight,0);
+ $("cart").textContent=n?`${n} item${n>1?"s":""} · ${+w.toFixed(2)} kg`:"Nothing selected yet.";
+ $("place").textContent=ADDING?`Add to order #${ADDING}`:"Place order";
+ $("banner").innerHTML=ADDING?`<div class="banner">Adding items to order #${ADDING}. <button class="mini" data-stopadd="1">Stop</button></div>`:"";}
+function drawMine(){$("myorders").innerHTML=MINE.length?MINE.map(o=>{
+ const gone=o.items.filter(i=>i.unavailable).map(i=>esc(i.name));
+ const note=gone.length?`<p class="bad">The warehouse could not supply ${gone.join(", ")}, so it was removed from your order.</p>`:"";
+ const acts=o.status==="placed"?`<div><button class="mini" data-addto="${o.id}">Add items</button><button class="mini" data-cancel="${o.id}">Cancel order</button></div>`:"";
+ return `<div class="ord"><b>Order #${o.id}</b><p>${o.items.map(line).join("<br>")}</p>${note}${o.status==="cancelled"?'<span class="badge">Cancelled</span>':`<div>${steps(o.status)}</div>`}
+ <small>${LABEL[o.status]}${o.status==="packed"?" · sent in "+o.packed_boxes.map(b=>b.box).join(" + "):""}</small>${acts}</div>`}).join(""):'<div class="empty">No orders yet. Place one on the left.</div>';}
+function pick(o){const r=REC[o.id];
+ if(!r||r==="loading")return '<p class="muted">Working out the best box…</p>';
+ const names=r.boxes.map(b=>b.box).join(" + ");
+ const rows=r.boxes.map(b=>{const bx=BOXL.find(x=>x.id===b.box_id)||{};return `<li><b>${esc(b.box)}</b>${bx.id?` · ${bdims(bx)}`:""} · ₹${b.cost} · ${b.fill_percent}% full</li>`}).join("");
+ const ch=CHOICE[o.id]||[];const cnt=id=>ch.filter(x=>x===id).length;
+ const sel=BOXL.map(b=>`<div class="bs"><span><b>${esc(b.name)}</b><small>${bdims(b)} · ₹${b.cost}</small></span><div class="step"><button data-oid="${o.id}" data-bid="${b.id}" data-bd="-1" aria-label="Fewer ${esc(b.name)}">−</button><span>${cnt(b.id)}</span><button data-oid="${o.id}" data-bid="${b.id}" data-bd="1" aria-label="More ${esc(b.name)}">+</button></div></div>`).join("");
+ const rej=r.rejected||[];const same=rej.length>1&&rej.every(x=>x.reason===rej[0].reason);
+ const why=(same?[{box:"All boxes",reason:rej[0].reason}]:rej).map(x=>`<li><b>${esc(x.box)}</b>: ${esc(x.reason)}</li>`).join("");
+ const head=r.status==="no_fit"?`<div class="verdict bad">No box works<small>${esc(r.message)}</small></div>`:`<div class="verdict">Use: ${esc(names)}<small>${esc(r.message)}</small></div>`;
+ return `${head}<ul class="boxes">${rows}</ul>${why?`<details><summary>Why not the others</summary><ul class="why">${why}</ul></details>`:""}
+ <h3>Step 2: Choose the box</h3>${sel}<button class="go" data-pack="${o.id}" ${allPicked(o)?"":"disabled"}>Mark as packed</button>${allPicked(o)?"":'<p class="muted">Pick all items first.</p>'}<p class="${MSG[o.id]?.err?"bad":"ok"}">${esc(MSG[o.id]?.t||"")}</p>`;}
+function drawQueue(){const rank={accepted:0,placed:1,packed:2,cancelled:3};
+ const l=[...ORDERS].sort((a,b)=>rank[a.status]-rank[b.status]||b.id-a.id);
+ $("queue").innerHTML=l.length?l.map(o=>{const open=o.status==="placed"||o.status==="accepted";
+ const lines=o.items.map(i=>`<div class="ln"><span>${line(i)}</span>${open&&!i.unavailable?`<button class="mini" data-un="${o.id},${i.id}">Not available</button>`:""}</div>`).join("");
+ return `<div class="ord"><div class="oh"><b>Order #${o.id} · ${esc(o.customer)}</b><span class="badge ${o.status}">${LABEL[o.status]}</span></div>
+ ${lines}<small>${o.total_weight} kg to pack</small>
+ ${o.status==="placed"?`<div><button class="go" data-accept="${o.id}">Accept order</button></div>`:""}
+ ${o.status==="accepted"?picklist(o)+pick(o):""}
+ ${o.status==="packed"?`<p class="ok">Packed in ${o.packed_boxes.map(b=>b.box).join(" + ")} · ₹${o.packed_boxes.reduce((s,b)=>s+b.cost,0)}${MSG[o.id]?.t?" · "+esc(MSG[o.id].t):""}</p>`:""}</div>`}).join(""):'<div class="empty">No orders yet. Place one from the customer tab.</div>';}
+function drawInv(){$("invlist").innerHTML=PRODS.map(p=>`<div class="row"><div class="n"><b>${esc(p.name)}</b><small>${fmt([p.length,p.width,p.height])} cm · ${p.weight} kg</small></div><span class="${p.stock===0?"bad":""}">${p.stock} in stock</span><button class="mini" data-restock="${p.id}">+10</button></div>`).join("");}
+const RLAB={pending:["Under review","pend"],available:["Available","avail"],temporarily_unavailable:["Temporarily unavailable","temp"],not_available:["Not available / not supported","na"]};
+const pill=s=>`<span class="pill ${RLAB[s][1]}">${RLAB[s][0]}</span>`;
+const days=n=>`${n} day${n>1?"s":""}`;
+const reqText=r=>r.status==="available"?"It is in the shop now. You can order it.":r.status==="temporarily_unavailable"?`Out of stock right now. Expected back in ${days(r.restock_days)}.`:r.status==="not_available"?(r.reason||"The warehouse does not stock or handle this product."):"The warehouse is checking if it can supply this.";
+function drawMyReqs(){$("myreqs").innerHTML=MYREQS.length?MYREQS.map(r=>`<div class="ord"><div class="oh"><b>${esc(r.name)} × ${r.quantity}</b>${pill(r.status)}</div><p class="${r.status==="temporarily_unavailable"?"warn":r.status==="not_available"?"bad":r.status==="available"?"ok":"muted"}">${esc(reqText(r))}</p></div>`).join(""):'<div class="empty">No item requests yet.</div>';}
+const rf=(id,k,d="")=>esc((RF[id]&&RF[id][k]!=null)?RF[id][k]:d);
+function drawReqs(){const open=r=>r.status==="pending"||r.status==="temporarily_unavailable";
+ const l=[...REQS].sort((a,b)=>open(b)-open(a)||b.id-a.id);const n=REQS.filter(r=>r.status==="pending").length;
+ $("reqcount").textContent=n?`(${n} new)`:"";
+ $("reqs").innerHTML=l.length?l.map(r=>{const id=r.id;
+ const head=`<div class="oh"><b>${esc(r.name)} × ${r.quantity} · ${esc(r.customer)}</b>${pill(r.status)}</div>${r.note?`<p class="muted">“${esc(r.note)}”</p>`:""}`;
+ if(!open(r))return `<div class="rq">${head}<p class="${r.status==="available"?"ok":"bad"}">${esc(reqText(r))}</p></div>`;
+ const inp=(f,ph,t="number")=>`<input type="${t}" min="0" step="any" data-rq="${id}" data-f="${f}" placeholder="${ph}" aria-label="${ph}" value="${rf(id,f)}">`;
+ return `<div class="rq">${head}${r.status==="temporarily_unavailable"?`<p class="warn">Customer was told: back in ${days(r.restock_days)}.</p>`:""}
+ <div class="muted">Verify the product, then decide:</div>
+ <div class="frm">${inp("length","Length (cm)")}${inp("width","Width (cm)")}${inp("height","Height (cm)")}${inp("weight","Weight (kg)")}${inp("stock","Stock (default "+r.quantity+")")}
+ <label class="opt"><input type="checkbox" data-rq="${id}" data-f="fragile" ${RF[id]&&RF[id].fragile?"checked":""}> Fragile</label></div>
+ <div class="acts"><button class="okb" data-rid="${id}" data-dec="available">Approve: Available</button>
+ <button class="wb" data-rid="${id}" data-dec="temporarily_unavailable" data-days="1">Temporarily unavailable: back in 1 day</button>
+ <button class="wb" data-rid="${id}" data-dec="temporarily_unavailable" data-days="2">back in 2 days</button></div>
+ <div class="acts"><input data-rq="${id}" data-f="reason" placeholder="Reason (optional)" aria-label="Reason" value="${rf(id,"reason")}" style="flex:1;min-width:160px"><button class="rb" data-rid="${id}" data-dec="not_available">Not available / not supported</button></div>
+ <p class="bad">${esc(RMSG[id]||"")}</p></div>`}).join(""):'<div class="empty">No item requests from customers yet.</div>';}
+async function review(id,dec,days){const f=RF[id]||{};const b={decision:dec};
+ if(dec==="available"){Object.assign(b,{length:+f.length,width:+f.width,height:+f.height,weight:+f.weight,fragile:!!f.fragile});if(f.stock!==undefined&&f.stock!=="")b.stock=+f.stock;}
+ if(dec==="temporarily_unavailable")b.restock_days=+days;if(dec==="not_available")b.reason=f.reason||"";
+ const r=await api("POST",`/api/requests/${id}/review/`,b);RMSG[id]=r.status===200?"":(r.data.error||"Could not save");await poll();}
+const allPicked=o=>o.items.filter(i=>!i.unavailable).every(i=>i.picked>=i.quantity);
+const typing=id=>{const a=document.activeElement;return !!(a&&a.tagName==="INPUT"&&a.type!=="checkbox"&&$(id).contains(a));};
+function picklist(o){const l=o.items.filter(i=>!i.unavailable);
+ const rows=l.map(i=>{const done=i.picked>=i.quantity;return `<div class="bs"><span><b>${esc(i.name)}</b><small>Customer ordered ${i.quantity}</small></span>
+ <div class="pk"><div class="step"><button data-pk="${o.id},${i.id},-1" aria-label="Pick one less ${esc(i.name)}">−</button><input class="qin" type="number" min="0" max="${i.quantity}" data-pkq="${o.id},${i.id}" value="${i.picked}" aria-label="Picked ${esc(i.name)}"><button data-pk="${o.id},${i.id},1" aria-label="Pick one more ${esc(i.name)}">+</button></div>
+ <span class="${done?"ok":"muted"}" style="min-width:42px;text-align:right">${done?"✓ done":i.picked+" / "+i.quantity}</span></div></div>`}).join("");
+ return `<h3>Step 1: Pick the items</h3><p class="muted">Select how many of each item you took from the shelf.</p>${rows}<button class="mini" data-pickall="${o.id}">Pick all</button>`;}
+async function loadRec(id){if(REC[id])return;REC[id]="loading";const r=await api("POST",`/api/orders/${id}/recommend-box/`);REC[id]=r.data;
+ CHOICE[id]=(r.data.boxes||[]).map(b=>b.box_id);drawQueue();}
+async function poll(){PRODS=(await api("GET","/api/products/")).data.products;PRODS.forEach(p=>{if(qty[p.id]==null)qty[p.id]=0;qty[p.id]=Math.min(qty[p.id],p.stock)});
+ ORDERS=(await api("GET","/api/orders/")).data.orders||[];
+ MINE=(await api("GET","/api/orders/?customer="+encodeURIComponent($("cname").value.trim()||"Guest"))).data.orders||[];
+ REQS=(await api("GET","/api/requests/")).data.requests||[];MYREQS=(await api("GET","/api/requests/?customer="+encodeURIComponent($("cname").value.trim()||"Guest"))).data.requests||[];
+ ORDERS.filter(o=>o.status==="accepted").forEach(o=>loadRec(o.id));if(!typing("shop"))drawShop();drawMine();if(!typing("queue"))drawQueue();drawInv();drawMyReqs();if(!typing("reqs"))drawReqs();}
+function route(){tab=location.hash==="#warehouse"?"warehouse":"shop";$("v-shop").hidden=tab!=="shop";$("v-warehouse").hidden=tab!=="warehouse";
+ $("t-shop").classList.toggle("on",tab==="shop");$("t-warehouse").classList.toggle("on",tab==="warehouse");}
+document.addEventListener("click",async e=>{const t=e.target.closest("button");if(!t||t.disabled)return;const d=t.dataset;
+ if(d.tab){location.hash=d.tab;route();return;}
+ if(d.sd){const id=+d.id;qty[id]=Math.max(0,qty[id]+ +d.sd);drawShop();return;}
+ if(d.stopadd){ADDING=null;drawShop();return;}
+ if(d.addto){ADDING=+d.addto;$("placed").textContent="";drawShop();return;}
+ if(d.cancel){const r=await api("POST",`/api/orders/${d.cancel}/cancel/`);if(r.status!==200)alert(r.data.error);await poll();return;}
+ if(d.accept){await api("POST",`/api/orders/${d.accept}/accept/`);await poll();return;}
+ if(d.un){const [o,i]=d.un.split(",");await api("POST",`/api/orders/${o}/items/${i}/unavailable/`);delete REC[o];await poll();return;}
+ if(d.restock){await api("POST",`/api/products/${d.restock}/stock/`,{change:10});await poll();return;}
+ if(d.bd){const o=+d.oid,b=+d.bid;const c=CHOICE[o]||(CHOICE[o]=[]);
+  if(+d.bd>0)c.push(b);else{const i=c.indexOf(b);if(i>=0)c.splice(i,1);}drawQueue();return;}
+ if(d.pack){const id=+d.pack;const r=await api("POST",`/api/orders/${id}/pack/`,{box_ids:CHOICE[id]||[]});
+  if(r.status===200){const x=r.data.extra_cost;MSG[id]={t:x>0?`₹${x} more than the cheapest option`:x<0?`₹${-x} less than recommended`:"matches the recommendation"};}
+  else MSG[id]={t:r.data.error||"Could not pack",err:true};await poll();return;}
+ if(d.pk){const [o,i,dl]=d.pk.split(",").map(Number);const it=ORDERS.find(x=>x.id===o).items.find(x=>x.id===i);
+  await api("POST",`/api/orders/${o}/items/${i}/pick/`,{picked:Math.max(0,Math.min(it.quantity,it.picked+dl))});await poll();return;}
+ if(d.pickall){const od=ORDERS.find(x=>x.id==d.pickall);for(const it of od.items)if(!it.unavailable&&it.picked<it.quantity)await api("POST",`/api/orders/${od.id}/items/${it.id}/pick/`,{picked:it.quantity});await poll();return;}
+ if(d.rid){await review(+d.rid,d.dec,d.days);return;}
+ if(t.id==="rq-send"){const r=await api("POST","/api/requests/place/",{customer_name:$("cname").value.trim()||"Guest",name:$("rq-name").value,quantity:+$("rq-qty").value||1,note:$("rq-note").value});
+  $("rq-msg").className=r.status===201?"ok":"bad";$("rq-msg").textContent=r.status===201?"Request sent. The warehouse will check it.":(r.data.error||"Could not send");
+  if(r.status===201){$("rq-name").value="";$("rq-note").value="";$("rq-qty").value=1;}await poll();return;}
+ if(t.id==="addp"){const g=k=>$(k).value;const r=await api("POST","/api/products/add/",{name:g("np-name"),stock:+g("np-stock")||0,length:+g("np-l"),width:+g("np-w"),height:+g("np-h"),weight:+g("np-kg"),fragile:$("np-fr").checked});
+  $("addmsg").className=r.status===201?"ok":"bad";$("addmsg").textContent=r.status===201?`${r.data.name} added.`:(r.data.error||"Could not add");
+  if(r.status===201)["np-name","np-stock","np-l","np-w","np-h","np-kg"].forEach(k=>$(k).value="");await poll();return;}
+ if(t.id==="place"){const items=PRODS.filter(p=>qty[p.id]>0).map(p=>({product_id:p.id,quantity:qty[p.id]}));
+  if(!items.length){$("placed").textContent="Add at least one item first.";$("placed").className="bad";return;}
+  const r=ADDING?await api("POST",`/api/orders/${ADDING}/add-items/`,{items}):await api("POST","/api/orders/place/",{customer_name:$("cname").value.trim()||"Guest",items});
+  if(r.status===201||r.status===200){$("placed").className="ok";$("placed").textContent=ADDING?`Items added to order #${ADDING}.`:`Order #${r.data.id} placed. The warehouse will accept it shortly.`;ADDING=null;PRODS.forEach(p=>qty[p.id]=0);await poll();}
+  else{$("placed").className="bad";$("placed").textContent=r.data.error||"Could not place order";await poll();}}});
+$("cname").addEventListener("change",poll);
+document.addEventListener("change",async e=>{const t=e.target;
+ if(t.dataset&&t.dataset.pkq){const [o,i]=t.dataset.pkq.split(",").map(Number);const it=ORDERS.find(x=>x.id===o).items.find(x=>x.id===i);
+  t.blur();await api("POST",`/api/orders/${o}/items/${i}/pick/`,{picked:Math.max(0,Math.min(it.quantity,parseInt(t.value)||0))});await poll();return;}
+ if(t.dataset&&t.dataset.qi){const p=PRODS.find(x=>x.id==t.dataset.qi);qty[p.id]=Math.max(0,Math.min(p.stock,parseInt(t.value)||0));drawShop();}});
+document.addEventListener("input",e=>{const t=e.target;if(t.dataset&&t.dataset.rq){const o=RF[t.dataset.rq]||(RF[t.dataset.rq]={});o[t.dataset.f]=t.type==="checkbox"?t.checked:t.value;}});$("search").addEventListener("input",drawShop);window.addEventListener("hashchange",route);
+(async()=>{BOXL=(await api("GET","/api/boxes/")).data.boxes;route();await poll();setInterval(poll,4000);})();
+</script>
+</body></html>
