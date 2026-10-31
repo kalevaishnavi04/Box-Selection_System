@@ -2,6 +2,9 @@
 
 QuickPack is a small **Django** project for an e-commerce warehouse. When a customer places an order, the system **recommends the best shipping box** for the items. The warehouse team then accepts, picks, packs and sends the order, and the customer gets a notification at every step.
 
+## 🌐 Live Demo
+https://box-selection-system-m6yo.onrender.com
+
 **Built by:** Vaishnavi Manik Kale
 
 ---
